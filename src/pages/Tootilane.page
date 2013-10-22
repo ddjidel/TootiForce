@@ -1,0 +1,73 @@
+<apex:page controller="TootiLaneController" >
+        
+    <link href="/sCSS/28.0/sprites/1371760580000/Theme3/default/gc/chatterCore.css" rel="stylesheet" type="text/css"/>
+    
+    <apex:form enctype="multipart/form-data">			
+    
+					<apex:outputPanel layout="block" styleClass="publishercontainer contentPublisherSlideDown customPanel alignTop">
+						<apex:outputLabel value="Select your lane" for="values"/>
+						<br/>
+						<apex:selectList value="{!lanename}" size="1" id="values">
+							<apex:selectOptions value="{!LaneNames}"/>
+						</apex:selectList>
+						<br />	    
+						<br />	    									
+						<apex:inputFile value="{!feeditem.contentdata}" filename="{!feeditem.contentfilename}" id="file"/>					
+					</apex:outputPanel>
+					
+					<apex:outputPanel layout="block" styleClass="publishercontainer">
+						<apex:outputPanel layout="block" styleClass="publisherTextAreaPlaceholder">
+							<apex:outputPanel layout="block" styleClass="publisherTextAreaContainer">
+								<apex:outputLabel value="Post" for="post"/>
+								<apex:outputPanel layout="block" styleClass="publisherTextAreaInner">
+									<apex:inputTextarea value="{!feeditem.body}" id="post" styleClass="chatterHashtagsEnabled chatterTopicsEnabled publishertextarea"/>
+							    </apex:outputPanel>
+							</apex:outputPanel>
+						</apex:outputPanel>
+						
+						<apex:outputPanel layout="block" styleClass="publisherBottomBarPlaceholder">
+							<apex:outputPanel layout="block" styleClass="bottomBar">
+								<apex:outputPanel layout="block" styleClass="bottomBarLeft">
+								
+								</apex:outputPanel>					
+								<apex:outputPanel layout="block" styleClass="bottomBarRight">
+									<apex:outputPanel styleClass="publisherShareButtonPlaceholder">
+										<apex:commandButton action="{!share}" value="Share" styleClass="zen-btn"/>
+									</apex:outputPanel>																			
+								</apex:outputPanel>					
+							
+							</apex:outputPanel>					
+						</apex:outputPanel>
+						
+					</apex:outputPanel>
+	 
+	</apex:form>
+    
+    <script type="text/javascript">
+    
+    	var latitude;
+    	var longitude;
+    	
+    	if (navigator.geolocation) {
+    		
+    		navigator.geolocation.getCurrentPosition(showPosition);
+		}
+    	
+		function showPosition(position) {
+			
+			latitude = position.coords.latitude;
+			longitude = position.coords.longitude;
+			
+			alert('latitude: ' + latitude);
+			alert('longitude: ' + longitude);
+		
+			Visualforce.remoting.Manager.invokeAction(
+				'{!$RemoteAction.TootiLaneController.SetCoordinates}', 
+				latitude,
+				longitude; 
+				function(result, event){}
+			);			
+		}
+		
+    </script>
+</apex:page>
